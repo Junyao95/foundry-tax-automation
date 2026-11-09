@@ -71,23 +71,57 @@ Full detail, data contracts and sequence diagram: [docs/architecture.md](docs/ar
 
 ## 🖼️ Demo & screenshots
 
-Screenshots are **not captured yet**. Every slot is pre-defined so the docs can
-be filled in without restructuring them — see the
-[Screenshot shot list](docs/screenshots.md) for what to capture, how to redact
-tenant/PII details, the exact filenames, and the one-line Markdown snippet for
-each slot.
+Every figure below uses **synthetic sample data** (`John Doe`, demo SGD
+amounts). Azure subscription IDs, storage-account names and SAS tokens were
+redacted before publishing — see the
+[Screenshot shot list](docs/screenshots.md) for the capture and redaction rules.
 
-> 📸 **SLOT `04-upload`** — Streamlit Step 1: document URL input.
-> Expected file: `docs/screenshots/04-upload.png` · [shot list entry](docs/screenshots.md#slot-04--04-uploadpng)
+### The input document
 
-> 📸 **SLOT `05-sow-review`** — Streamlit Step 2: proposed SOW with a flagged item.
-> Expected file: `docs/screenshots/05-sow-review.png` · [shot list entry](docs/screenshots.md#slot-05--05-sow-reviewpng)
+A one-page remuneration & allowances PDF is uploaded to Blob Storage and read
+through a short-lived read-only SAS URL. It contains no real employee data.
 
-> 📸 **SLOT `06-result-pdf`** — Streamlit Step 3: computation and PDF download.
-> Expected file: `docs/screenshots/06-result-pdf.png` · [shot list entry](docs/screenshots.md#slot-06--06-result-pdfpng)
+![Sample compensation document used as input](docs/screenshots/00-sample-input.png)
 
-<!-- After capturing, replace each block above with a standard Markdown image
-     pointing at docs/screenshots/04-upload.png and its companions. -->
+### Step 1 — upload a compensation document
+
+![Step 1 - upload a compensation document](docs/screenshots/04-upload.png)
+
+### Step 2 — review and approve the proposed SOW
+
+![Step 2 - review and approve the proposed SOW](docs/screenshots/05-sow-review.png)
+
+Items absent from the prior-year Schedule of Work are marked
+`REQUIRES_HUMAN_REVIEW`. **Nothing is computed until a person approves.**
+
+### Step 3 — result and PDF deliverable
+
+![Step 3 - tax result and PDF download](docs/screenshots/06-result-pdf.png)
+
+### The generated tax package
+
+![Generated A4 tax computation package](docs/screenshots/07-pdf-package.png)
+
+<details>
+<summary>Azure-side evidence — project, agents and SAS configuration</summary>
+
+**The Microsoft Foundry project** (subscription name, subscription ID and parent
+resource ID redacted).
+
+![Foundry project overview](docs/screenshots/01-portal-project.png)
+
+**Both hosted agents registered in the project.** The third entry is the
+in-process tax-computation agent used after human approval.
+
+![Hosted agents listed in Microsoft Foundry](docs/screenshots/02-hosted-agents.png)
+
+**Generating a short-lived read-only SAS URL.** The generated *Blob SAS token*
+and *Blob SAS URL* fields are deliberately excluded from the capture — those
+values are credentials and must never be published.
+
+![Generating a read-only Blob SAS URL in the Azure Portal](docs/screenshots/03-generate-sas.png)
+
+</details>
 
 ---
 
@@ -178,7 +212,9 @@ down — is in [docs/deployment.md](docs/deployment.md).
 This repository contains **no credentials, tokens, tenant IDs or
 tenant-specific resource URLs**. All deployment-specific values come from
 environment variables (`.env`, gitignored) and authentication uses
-`DefaultAzureCredential`. See [SECURITY.md](SECURITY.md) for the reporting
+`DefaultAzureCredential`. The showcase screenshots were redacted before
+committing: subscription names/IDs, storage-account names and every SAS token
+or SAS URL field were removed. See [SECURITY.md](SECURITY.md) for the reporting
 policy and [docs/configuration.md](docs/configuration.md#4-secret-handling) for
 how to wire Key Vault and managed identity in production.
 

@@ -4,6 +4,36 @@ All notable changes to this project are documented here. Format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-11-09
+
+Documentation/showcase update. No application code changed.
+
+### Added
+
+- Eight optimised screenshots in `docs/screenshots/` (`00`–`07`): sample input
+  document, Foundry project overview, hosted-agent list, SAS generation pane,
+  Streamlit steps 1–3, and the generated A4 PDF package.
+- Real images wired into `README.md`, `docs/architecture.md`,
+  `docs/deployment.md` and `docs/screenshots.md`; `📸 SLOT` callouts removed.
+- A "what was redacted" table and a per-slot inventory in the shot list.
+
+### Changed
+
+- Slot 03 was repurposed from `03-terminal-invoke.png` (never captured) to
+  `03-generate-sas.png`, documenting the Portal SAS-generation flow.
+- The two Step 3 captures were stitched into a single `06-result-pdf.png` so
+  the calculation and the download button appear together.
+- `docs/screenshots/README.md` now lists the current image inventory.
+
+### Security
+
+- `01-portal-project.png`: subscription name, subscription GUID and
+  parent-resource link covered.
+- `03-generate-sas.png`: the **Blob SAS token** and **Blob SAS URL** fields are
+  absent from the published file (source cropped above them), and the
+  storage-account name in the breadcrumb is covered.
+- All demo figures in the screenshots are synthetic; no real employee data.
+
 ## [0.1.0] - 2026-11-09
 
 First public release: the two-agent tax automation side project, reorganized
@@ -60,4 +90,5 @@ into a standalone, publishable repository with a full documentation set.
 - No secrets were ever committed to git history: the original working folder
   was untracked.
 
+[0.1.1]: https://github.com/Junyao95/foundry-tax-automation/commits/main
 [0.1.0]: https://github.com/Junyao95/foundry-tax-automation/releases/tag/v0.1.0

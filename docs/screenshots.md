@@ -1,16 +1,29 @@
 # Screenshot shot list
 
-**Status: not captured yet.** Every place a screenshot belongs is already
-marked in the docs with a `📸 SLOT` callout, so filling them in is a
-copy-paste job — no restructuring needed.
+**Status: captured.** Slots `00`–`07` are committed in [`docs/screenshots/`](screenshots/)
+and wired into the README, architecture guide and deployment guide. Slots `08`
+and `09` are optional and have not been captured.
 
 - Folder: [`docs/screenshots/`](screenshots/)
 - The `![...](...)` snippets below are **relative to the file named in "Embed in"**.
   For `README.md` they start with `docs/screenshots/`; for files inside `docs/`
   they start with `screenshots/`.
-- Format: PNG, ~1440 px wide, 1× or 2×, cropped to the relevant window
+- Format: PNG, cropped to the relevant window, optimised (all 8 images total < 1 MB)
 - Filenames: exactly as listed below (lowercase, hyphens, numbered)
-- Commit them to `docs/screenshots/` and replace the matching callout block
+- All figures in the images are **synthetic demo data** (`John Doe`, demo SGD amounts)
+
+| Slot | File | Size | State |
+| --- | --- | --- | --- |
+| 00 | `00-sample-input.png` | 781 × 735 | Captured |
+| 01 | `01-portal-project.png` | 1657 × 601 | Captured, redacted |
+| 02 | `02-hosted-agents.png` | 1701 × 733 | Captured |
+| 03 | `03-generate-sas.png` | 1707 × 785 | Captured, cropped + redacted |
+| 04 | `04-upload.png` | 1697 × 767 | Captured |
+| 05 | `05-sow-review.png` | 1327 × 932 | Captured |
+| 06 | `06-result-pdf.png` | 707 × 1140 | Captured, two shots stitched |
+| 07 | `07-pdf-package.png` | 797 × 806 | Captured |
+| 08 | `08-logs-traces.png` | — | Optional, not captured |
+| 09 | `09-cli-orchestrator.png` | — | Optional, not captured |
 
 ---
 
@@ -29,18 +42,47 @@ blur or crop out:
 
 Run `git diff --cached` / inspect the final PNG at 100% zoom before committing.
 
+### What was redacted in this set
+
+| Image | Action taken | Why |
+| --- | --- | --- |
+| `01-portal-project.png` | Grey bars over subscription name + subscription GUID and over the parent-resource link | Identifiers tied to the author's Azure subscription |
+| `03-generate-sas.png` | Cropped at y = 785 px so the **Blob SAS token** and **Blob SAS URL** fields are not in the file at all; grey bar over the storage-account name in the breadcrumb | A SAS token is a live credential. Cropping is safer than blurring because the pixels are absent from the published file |
+| `06-result-pdf.png` | Two captures of the same Step 3 screen stitched vertically at a common width | The second capture held the "Download Deliverable" button that the first one cut off |
+
+No other image contained a URL, token, key, email, subscription ID or real
+personal data. The sample document (`00`) and the generated PDF (`07`) contain
+only synthetic demo figures.
+
 ---
 
 ## Slots
+
+### Slot 00 — `00-sample-input.png`
+
+| | |
+| --- | --- |
+| **Capture** | The sample remuneration & allowances PDF opened in a viewer |
+| **Show** | The input shape: salary, bonus, allowances and employer-borne tax items |
+| **Embed in** | `README.md` → "Demo & screenshots" → "The input document" |
+| **Redact** | None needed — synthetic figures, no employee/employer name |
+
+![Sample compensation document used as input](screenshots/00-sample-input.png)
+
+```markdown
+![Sample compensation document used as input](docs/screenshots/00-sample-input.png)
+```
 
 ### Slot 01 — `01-portal-project.png`
 
 | | |
 | --- | --- |
-| **Capture** | Azure Portal → your Microsoft Foundry project → Overview |
-| **Show** | The project name, model deployment and the fact that two agents live in it |
-| **Embed in** | `docs/deployment.md` after step 7; optionally `README.md` |
-| **Redact** | Subscription ID, tenant ID, account name, email in the top-right |
+| **Capture** | Azure Portal → the Microsoft Foundry project → Overview |
+| **Show** | The project exists and links through to the Foundry portal |
+| **Embed in** | `README.md` (collapsed "Azure-side evidence"); `docs/deployment.md` §5 |
+| **Redact** | **Subscription name + GUID** and parent-resource ID — done |
+
+![Foundry project overview](screenshots/01-portal-project.png)
 
 ```markdown
 ![Foundry project overview](screenshots/01-portal-project.png)
@@ -50,36 +92,48 @@ Run `git diff --cached` / inspect the final PNG at 100% zoom before committing.
 
 | | |
 | --- | --- |
-| **Capture** | Foundry project → Agents list showing `extraction-agent` and `sow-builder-agent` |
-| **Show** | Both agents deployed and healthy — the clearest proof of the architecture |
-| **Embed in** | `README.md` under "Architecture at a glance"; `docs/architecture.md` §1 |
-| **Redact** | Resource IDs, subscription/tenant IDs |
+| **Capture** | Foundry project home → "Recent work → Agents" list |
+| **Show** | `sow-builder-agent` and `extraction-agent-test` deployed, plus the in-process `TaxComputationAgent` |
+| **Embed in** | `README.md` (collapsed "Azure-side evidence"); `docs/architecture.md` §1 |
+| **Redact** | None needed — no resource IDs or endpoints are expanded |
+
+![Hosted agents listed in Microsoft Foundry](screenshots/02-hosted-agents.png)
 
 ```markdown
-![Both hosted agents deployed in Microsoft Foundry](screenshots/02-hosted-agents.png)
+![Hosted agents listed in Microsoft Foundry](screenshots/02-hosted-agents.png)
 ```
 
-### Slot 03 — `03-terminal-invoke.png`
+### Slot 03 — `03-generate-sas.png`
+
+> This slot was **repurposed**. The original `03-terminal-invoke.png` slot
+> expected a terminal capture of `azd ai agent invoke`; no such capture was
+> supplied. The screenshot provided was an Azure Portal **Generate SAS** pane,
+> so the slot now documents SAS-URL creation instead. Steps 2–3 of
+> `docs/development.md` and §3 of `docs/api.md` remain text-only.
 
 | | |
 | --- | --- |
-| **Capture** | Terminal showing `azd ai agent invoke --local "Extract data from: ..."` and its JSON response |
-| **Show** | That each agent is independently testable over the Responses protocol |
-| **Embed in** | `docs/development.md` §2; `docs/api.md` §3 |
-| **Redact** | Any SAS URL in the command, tokens, absolute home-directory paths if desired |
+| **Capture** | Azure Portal → storage container → blob → "Generate SAS" pane |
+| **Show** | Read-only permission, HTTPS only, short expiry, account-key signing |
+| **Embed in** | `README.md` (collapsed "Azure-side evidence"); `docs/deployment.md` §5 |
+| **Redact** | **SAS token and SAS URL fields cropped out entirely**; storage-account name in breadcrumb covered |
+
+![Generating a read-only Blob SAS URL in the Azure Portal](screenshots/03-generate-sas.png)
 
 ```markdown
-![Invoking the extraction agent locally with azd](screenshots/03-terminal-invoke.png)
+![Generating a read-only Blob SAS URL in the Azure Portal](screenshots/03-generate-sas.png)
 ```
 
 ### Slot 04 — `04-upload.png`
 
 | | |
 | --- | --- |
-| **Capture** | Streamlit Step 1 — "Upload compensation file", SAS URL field, "Extract & build SOW" button |
-| **Show** | The entry point of the app and the SAS-URL safety caption |
-| **Embed in** | `README.md` → "Demo & screenshots" (first slot) |
-| **Redact** | **The SAS URL** — use a fake `https://example.blob.core.windows.net/compensation/sample.pdf?...` value |
+| **Capture** | Streamlit Step 1 — "Upload Compensation File", empty SAS URL field |
+| **Show** | The entry point of the app |
+| **Embed in** | `README.md` → "Demo & screenshots" → Step 1 |
+| **Redact** | None needed — **the SAS URL field is empty** |
+
+![Step 1 - upload a compensation document](screenshots/04-upload.png)
 
 ```markdown
 ![Step 1 - upload a compensation document](docs/screenshots/04-upload.png)
@@ -89,10 +143,12 @@ Run `git diff --cached` / inspect the final PNG at 100% zoom before committing.
 
 | | |
 | --- | --- |
-| **Capture** | Streamlit Step 2 — proposed SOW in `st.json` with the amber "flagged for human review" warning and Approve / Reject buttons |
+| **Capture** | Streamlit Step 2 — proposed SOW in `st.json` with flagged items and Approve / Reject buttons |
 | **Show** | **The most important screenshot**: the human-in-the-loop control point |
-| **Embed in** | `README.md` → "Demo & screenshots" (middle slot); `docs/architecture.md` §2 |
-| **Redact** | Employee name (use sample data), any real amounts if sensitive |
+| **Embed in** | `README.md` → "Demo & screenshots" → Step 2 |
+| **Redact** | None needed — `John Doe` and demo amounts only |
+
+![Step 2 - review and approve the proposed SOW](screenshots/05-sow-review.png)
 
 ```markdown
 ![Step 2 - review and approve the proposed SOW](docs/screenshots/05-sow-review.png)
@@ -102,10 +158,12 @@ Run `git diff --cached` / inspect the final PNG at 100% zoom before committing.
 
 | | |
 | --- | --- |
-| **Capture** | Streamlit Step 3 — tax computation JSON and the "Download tax package (A4 PDF)" button |
+| **Capture** | Streamlit Step 3 — tax computation JSON plus the "Download Tax Package (A4 PDF)" button |
 | **Show** | A completed end-to-end run and the deliverable |
-| **Embed in** | `README.md` → "Demo & screenshots" (third slot) |
-| **Redact** | Employee name, real figures if sensitive |
+| **Embed in** | `README.md` → "Demo & screenshots" → Step 3 |
+| **Redact** | None needed — no name appears in the result JSON |
+
+![Step 3 - tax result and PDF download](screenshots/06-result-pdf.png)
 
 ```markdown
 ![Step 3 - tax result and PDF download](docs/screenshots/06-result-pdf.png)
@@ -115,16 +173,18 @@ Run `git diff --cached` / inspect the final PNG at 100% zoom before committing.
 
 | | |
 | --- | --- |
-| **Capture** | The generated `Tax_Package_*.pdf` opened in a PDF viewer |
-| **Show** | Sections 1–3: summary, tax payable, audit trail |
-| **Embed in** | `docs/architecture.md` §4.4; `README.md` if there is room |
-| **Redact** | Employee name, real figures |
+| **Capture** | The generated A4 PDF opened in a viewer |
+| **Show** | Sections 1–3: tax computation summary, tax payable, audit trail |
+| **Embed in** | `README.md` → "The generated tax package"; `docs/architecture.md` §4.4 |
+| **Redact** | None needed — no employee name, synthetic SGD amounts |
+
+![Generated A4 tax computation package](screenshots/07-pdf-package.png)
 
 ```markdown
 ![Generated A4 tax computation package](screenshots/07-pdf-package.png)
 ```
 
-### Slot 08 — `08-logs-traces.png` *(optional)*
+### Slot 08 — `08-logs-traces.png` *(optional, not captured)*
 
 | | |
 | --- | --- |
@@ -137,7 +197,7 @@ Run `git diff --cached` / inspect the final PNG at 100% zoom before committing.
 ![Foundry hosted agent logs and traces](screenshots/08-logs-traces.png)
 ```
 
-### Slot 09 — `09-cli-orchestrator.png` *(optional)*
+### Slot 09 — `09-cli-orchestrator.png` *(optional, not captured)*
 
 | | |
 | --- | --- |
@@ -152,34 +212,37 @@ Run `git diff --cached` / inspect the final PNG at 100% zoom before committing.
 
 ---
 
-## Ready-to-paste README block
+## Where each image is embedded
 
-Once slots 04–06 exist, replace the three `📸 SLOT` callouts in `README.md`
-with:
+| File | Live in |
+| --- | --- |
+| `00-sample-input.png` | `README.md`, this page |
+| `01-portal-project.png` | `README.md`, `docs/deployment.md`, this page |
+| `02-hosted-agents.png` | `README.md`, `docs/architecture.md`, this page |
+| `03-generate-sas.png` | `README.md`, `docs/deployment.md`, this page |
+| `04-upload.png` | `README.md`, this page |
+| `05-sow-review.png` | `README.md`, this page |
+| `06-result-pdf.png` | `README.md`, this page |
+| `07-pdf-package.png` | `README.md`, `docs/architecture.md`, this page |
+| `08`, `09` | Not captured — snippets above are ready when they are |
 
-```markdown
-## 🖼️ Demo
+---
 
-### Upload a compensation document
-![Step 1 - upload](docs/screenshots/04-upload.png)
+## README wiring (already applied)
 
-### Review and approve the proposed SOW
-![Step 2 - review](docs/screenshots/05-sow-review.png)
-
-The amber warning marks items absent from the prior year as
-`REQUIRES_HUMAN_REVIEW`. Nothing is computed until a person approves.
-
-### Result and PDF deliverable
-![Step 3 - result](docs/screenshots/06-result-pdf.png)
-```
+The README's "Demo & screenshots" section now contains real images in this
+order: `00` → `04` → `05` → `06` → `07`, with `01`–`03` inside a collapsed
+`<details>` block so the landing page stays readable. The old `📸 SLOT`
+callouts were removed.
 
 ---
 
 ## Quick checklist
 
-- [ ] All PNGs named exactly as above and placed in `docs/screenshots/`
-- [ ] No SAS URLs, keys, tenant/subscription IDs or real employee data visible
-- [ ] Callout blocks replaced with the `![...](...)` snippets
-- [ ] Images render in GitHub's Markdown preview (relative paths)
-- [ ] Large PNGs compressed (aim for < 500 KB each) so the repo stays light
-- [ ] `docs/screenshots/README.md` still accurate
+- [x] All captured PNGs named as above and placed in `docs/screenshots/`
+- [x] No SAS URLs, keys, tenant/subscription IDs or real employee data visible
+- [x] Callout blocks replaced with real `![...](...)` images
+- [x] Images use relative paths that resolve in GitHub's Markdown preview
+- [x] PNGs optimised — 8 files, ~912 KB total (largest 223 KB)
+- [x] `docs/screenshots/README.md` updated with the current inventory
+- [ ] Optional: capture slots `08` and `09` and add them to the deployment/development guides

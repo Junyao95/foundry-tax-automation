@@ -144,7 +144,7 @@ Before opening a PR, walk through:
 - [ ] **Reject** stops the workflow with no tax computation
 - [ ] **Approve** produces JSON and a downloadable PDF
 - [ ] `DEMO_FALLBACK=false` makes unparseable SOW JSON fail loudly
-- [ ] README links and screenshot slots still resolve
+- [ ] README links and screenshot images still resolve (see [shot list](screenshots.md))
 
 ---
 

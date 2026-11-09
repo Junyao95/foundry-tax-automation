@@ -108,7 +108,14 @@ $env:AZURE_SEARCH_KEY = "<fresh-admin-key>"
 
 ## 5. Create the supporting Azure resources
 
-You can create these in the Portal or with the CLI. Example CLI shape:
+Your Microsoft Foundry project should already exist. In the Azure Portal it
+looks like this (subscription name, subscription ID and parent-resource ID
+redacted):
+
+![Foundry project overview](screenshots/01-portal-project.png)
+
+You can create the supporting resources in the Portal or with the CLI. Example
+CLI shape:
 
 ```bash
 az group create --name rg-tax-automation --location eastus2
@@ -137,6 +144,13 @@ az storage blob generate-sas --account-name <unique-storage-name> \
   --container-name compensation --name sample.pdf \
   --permissions r --expiry "<utc-expiry-within-1-hour>" --https-only --output tsv
 ```
+
+The equivalent Portal flow — read-only permission, HTTPS only, short expiry:
+
+![Generating a read-only Blob SAS URL in the Azure Portal](screenshots/03-generate-sas.png)
+
+The generated *Blob SAS token* and *Blob SAS URL* fields are **not** shown in
+that screenshot. They are credentials and must never be published.
 
 Prefix the result with the blob URL and paste the full URL into the Streamlit
 app. **SAS URLs are credentials**: use read-only, short expiry, and never paste

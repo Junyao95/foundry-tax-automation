@@ -30,6 +30,10 @@ it is an `Agent` object constructed inside the web app process using
 reusable document-processing steps; the tax step depends on a private,
 jurisdiction-specific prompt and runs only after a human signs off.
 
+Both hosted agents registered in the Foundry project:
+
+![Hosted agents listed in Microsoft Foundry](screenshots/02-hosted-agents.png)
+
 ---
 
 ## 2. End-to-end sequence
@@ -165,7 +169,10 @@ The exact key names are model-generated, which is why
 }
 ```
 
-This object drives both the JSON view in the UI and the A4 PDF.
+This object drives both the JSON view in the UI and the A4 PDF. Rendered
+deliverable (synthetic demo figures):
+
+![Generated A4 tax computation package](screenshots/07-pdf-package.png)
 
 ---
 
