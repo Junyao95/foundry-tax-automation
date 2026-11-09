@@ -1,0 +1,8 @@
+# Client application dependencies (Python 3.11+)
+# Install with: pip install -r webapp/requirements.txt
+agent-framework
+agent-framework-foundry
+azure-identity
+httpx
+streamlit
+fpdf2

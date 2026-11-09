@@ -1,0 +1,11 @@
+# Normalize line endings so diffs stay clean across Windows / Linux / CI.
+* text=auto eol=lf
+
+# Binary assets must never be line-converted.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.pdf binary
+
+# SVG is text, keep it LF.
+*.svg text eol=lf

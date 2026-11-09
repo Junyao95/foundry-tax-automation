@@ -1,0 +1,6 @@
+# SOW Builder Agent runtime dependencies (Python 3.13)
+agent-framework
+agent-framework-foundry
+agent-framework-foundry-hosting
+azure-identity
+azure-search-documents
